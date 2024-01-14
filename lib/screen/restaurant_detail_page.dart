@@ -1,6 +1,7 @@
 import 'package:dicoding_restaurant_app/model/restaurant_model.dart';
 import 'package:dicoding_restaurant_app/theme/theme.dart';
 import 'package:dicoding_restaurant_app/widget/menu_card.dart';
+import 'package:dicoding_restaurant_app/widget/menu_minuman_card.dart';
 import 'package:flutter/material.dart';
 
 class RestaruantDetailPage extends StatelessWidget {
@@ -126,7 +127,7 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    Widget listProduk(BuildContext context) {
+    Widget listProdukMakanan(BuildContext context) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -139,7 +140,7 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    Widget menuRestaurant() {
+    Widget menuMakanan() {
       return Container(
         margin: const EdgeInsets.only(
           top: 30,
@@ -148,11 +149,42 @@ class RestaruantDetailPage extends StatelessWidget {
           bottom: 15,
         ),
         child: Text(
-          'Menu Restaurant',
+          'Menu Makanan',
           style: primaryTextStyle.copyWith(
             fontSize: 20,
             fontWeight: semiBold,
           ),
+        ),
+      );
+    }
+
+    Widget menuMinuman() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 20,
+          right: 20,
+          bottom: 15,
+        ),
+        child: Text(
+          'Menu Minuman',
+          style: primaryTextStyle.copyWith(
+            fontSize: 20,
+            fontWeight: semiBold,
+          ),
+        ),
+      );
+    }
+
+    Widget listProdukMinuman(BuildContext context) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: restaurant.drinks
+              .map(
+                (drinks) => MenuMinumanCard(produk: drinks),
+              )
+              .toList(),
         ),
       );
     }
@@ -167,8 +199,10 @@ class RestaruantDetailPage extends StatelessWidget {
               imageUrl(),
               judulRestorant(),
               deskripsi(),
-              menuRestaurant(),
-              listProduk(context),
+              menuMakanan(),
+              listProdukMakanan(context),
+              menuMinuman(),
+              listProdukMinuman(context)
             ],
           ),
         ),
