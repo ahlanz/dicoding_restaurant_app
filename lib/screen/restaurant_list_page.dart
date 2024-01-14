@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dicoding_restaurant_app/model/restaurant_model.dart';
+import 'package:dicoding_restaurant_app/screen/restaurant_detail_page.dart';
 import 'package:dicoding_restaurant_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -131,6 +132,13 @@ class RestaurantListPage extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                RestaruantDetailPage.routName,
+                arguments: restaurant,
+              );
+            },
             title: Row(
               children: [
                 ClipRRect(
@@ -150,7 +158,7 @@ class RestaurantListPage extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
