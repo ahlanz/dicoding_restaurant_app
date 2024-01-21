@@ -1,5 +1,9 @@
 import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
 import 'package:dicoding_restaurant_app/theme/theme.dart';
+import 'package:dicoding_restaurant_app/widget/card_category.dart';
+import 'package:dicoding_restaurant_app/widget/card_costumer.dart';
+import 'package:dicoding_restaurant_app/widget/menu_card.dart';
+import 'package:dicoding_restaurant_app/widget/menu_minuman_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -129,18 +133,18 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    // Widget listProdukMakanan(BuildContext context) {
-    //   return SingleChildScrollView(
-    //     scrollDirection: Axis.horizontal,
-    //     child: Row(
-    //       children: restaurant.foods
-    //           .map(
-    //             (food) => MenuCard(produk: food),
-    //           )
-    //           .toList(),
-    //     ),
-    //   );
-    // }
+    Widget listProdukMakanan(BuildContext context) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: detailProvider.detailRestaurant!.menus!.food
+              .map(
+                (food) => MenuCard(produk: food),
+              )
+              .toList(),
+        ),
+      );
+    }
 
     Widget menuMakanan() {
       return Container(
@@ -178,18 +182,85 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    // Widget listProdukMinuman(BuildContext context) {
-    //   return SingleChildScrollView(
-    //     scrollDirection: Axis.horizontal,
-    //     child: Row(
-    //       children: restaurant.drinks
-    //           .map(
-    //             (drinks) => MenuMinumanCard(produk: drinks),
-    //           )
-    //           .toList(),
-    //     ),
-    //   );
-    // }
+    Widget categoryJudul() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 20,
+          right: 20,
+          bottom: 15,
+        ),
+        child: Text(
+          'Category',
+          style: primaryTextStyle.copyWith(
+            fontSize: 20,
+            fontWeight: semiBold,
+          ),
+        ),
+      );
+    }
+
+    Widget customerJudul() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 20,
+          right: 20,
+          bottom: 15,
+        ),
+        child: Text(
+          'Customer Review',
+          style: primaryTextStyle.copyWith(
+            fontSize: 20,
+            fontWeight: semiBold,
+          ),
+        ),
+      );
+    }
+
+    Widget listProdukMinuman(BuildContext context) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: detailProvider.detailRestaurant!.menus!.drinks
+              .map(
+                (drinks) => MenuMinumanCard(produk: drinks),
+              )
+              .toList(),
+        ),
+      );
+    }
+
+    Widget listCustomer(BuildContext context) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: detailProvider.detailRestaurant!.customers
+              .map(
+                (customer) => CardCostumer(customer: customer),
+              )
+              .toList(),
+        ),
+      );
+    }
+
+    Widget listCategory(BuildContext context) {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: detailProvider.detailRestaurant!.category
+                .map(
+                  (kategori) => CardCategory(
+                    kategori: kategori,
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+    }
 
     Widget content() {
       return SizedBox(
@@ -201,10 +272,14 @@ class RestaruantDetailPage extends StatelessWidget {
               imageUrl(),
               judulRestorant(),
               deskripsi(),
+              categoryJudul(),
+              listCategory(context),
               menuMakanan(),
-              // listProdukMakanan(context),
+              listProdukMakanan(context),
               menuMinuman(),
-              // listProdukMinuman(context)
+              listProdukMinuman(context),
+              customerJudul(),
+              listCustomer(context),
             ],
           ),
         ),

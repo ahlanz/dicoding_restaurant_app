@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
         initialRoute: RestaurantListPage.routName,
         routes: {
           RestaurantListPage.routName: (context) => const RestaurantListPage(),
-          RestaruantDetailPage.routName: (context) => RestaruantDetailPage(),
+          RestaruantDetailPage.routName: (context) =>
+              const RestaruantDetailPage(),
           SearchPage.routeName: (context) => const SearchPage(),
         },
       ),
