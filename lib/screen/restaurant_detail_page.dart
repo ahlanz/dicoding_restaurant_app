@@ -1,16 +1,18 @@
-import 'package:dicoding_restaurant_app/model/restaurant_model.dart';
+import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
 import 'package:dicoding_restaurant_app/theme/theme.dart';
-import 'package:dicoding_restaurant_app/widget/menu_card.dart';
-import 'package:dicoding_restaurant_app/widget/menu_minuman_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RestaruantDetailPage extends StatelessWidget {
-  final RestaurantModel restaurant;
   static const routName = '/restaurant-detail';
-  const RestaruantDetailPage({super.key, required this.restaurant});
+  const RestaruantDetailPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final DetailRestaurantProvider detailProvider =
+        Provider.of<DetailRestaurantProvider>(context);
     PreferredSizeWidget header() {
       return AppBar(
         title: Text(
@@ -26,7 +28,7 @@ class RestaruantDetailPage extends StatelessWidget {
     Widget imageUrl() {
       return SizedBox(
         child: Image.network(
-          '${restaurant.pictureId}',
+          'https://restaurant-api.dicoding.dev/images/large/${detailProvider.detailRestaurant?.pictureId}',
           width: double.infinity,
           height: 300,
         ),
@@ -43,7 +45,7 @@ class RestaruantDetailPage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              restaurant.name,
+              detailProvider.detailRestaurant?.name ?? '',
               style: primaryTextStyle.copyWith(
                 fontSize: 20,
                 fontWeight: semiBold,
@@ -63,7 +65,7 @@ class RestaruantDetailPage extends StatelessWidget {
                   width: 2,
                 ),
                 Text(
-                  restaurant.city,
+                  detailProvider.detailRestaurant?.city ?? '',
                   style: primaryTextStyle.copyWith(
                     fontSize: 12,
                   ),
@@ -85,7 +87,7 @@ class RestaruantDetailPage extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  '${restaurant.rating}/10',
+                  '${detailProvider.detailRestaurant?.rating}/10',
                   style: primaryTextStyle.copyWith(
                     fontSize: 12,
                   ),
@@ -115,7 +117,7 @@ class RestaruantDetailPage extends StatelessWidget {
               ),
             ),
             Text(
-              restaurant.description,
+              detailProvider.detailRestaurant?.description ?? 'error',
               style: secondaryTextStyle.copyWith(
                 fontSize: 14,
               ),
@@ -127,18 +129,18 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    Widget listProdukMakanan(BuildContext context) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: restaurant.foods
-              .map(
-                (food) => MenuCard(produk: food),
-              )
-              .toList(),
-        ),
-      );
-    }
+    // Widget listProdukMakanan(BuildContext context) {
+    //   return SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     child: Row(
+    //       children: restaurant.foods
+    //           .map(
+    //             (food) => MenuCard(produk: food),
+    //           )
+    //           .toList(),
+    //     ),
+    //   );
+    // }
 
     Widget menuMakanan() {
       return Container(
@@ -176,18 +178,18 @@ class RestaruantDetailPage extends StatelessWidget {
       );
     }
 
-    Widget listProdukMinuman(BuildContext context) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: restaurant.drinks
-              .map(
-                (drinks) => MenuMinumanCard(produk: drinks),
-              )
-              .toList(),
-        ),
-      );
-    }
+    // Widget listProdukMinuman(BuildContext context) {
+    //   return SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     child: Row(
+    //       children: restaurant.drinks
+    //           .map(
+    //             (drinks) => MenuMinumanCard(produk: drinks),
+    //           )
+    //           .toList(),
+    //     ),
+    //   );
+    // }
 
     Widget content() {
       return SizedBox(
@@ -200,9 +202,9 @@ class RestaruantDetailPage extends StatelessWidget {
               judulRestorant(),
               deskripsi(),
               menuMakanan(),
-              listProdukMakanan(context),
+              // listProdukMakanan(context),
               menuMinuman(),
-              listProdukMinuman(context)
+              // listProdukMinuman(context)
             ],
           ),
         ),

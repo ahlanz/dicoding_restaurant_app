@@ -1,12 +1,12 @@
 class RestaurantModel {
-  final String id;
-  final String name;
-  final String description;
-  final String pictureId;
-  final String city;
-  final double rating;
-  final List<FoodModel> foods;
-  final List<DrinkModel> drinks;
+  String id;
+  String name;
+  String description;
+  String pictureId;
+  String city;
+  double rating;
+  List<FoodModel> foods;
+  List<DrinkModel> drinks;
 
   RestaurantModel({
     required this.id,
@@ -45,6 +45,12 @@ class FoodModel {
   factory FoodModel.fromJson(Map<String, dynamic> json) {
     return FoodModel(name: json['name']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+    };
+  }
 }
 
 class DrinkModel {
@@ -54,5 +60,10 @@ class DrinkModel {
 
   factory DrinkModel.fromJson(Map<String, dynamic> json) {
     return DrinkModel(name: json['name']);
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+    };
   }
 }

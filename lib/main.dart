@@ -1,7 +1,10 @@
-import 'package:dicoding_restaurant_app/model/restaurant_model.dart';
+import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
+import 'package:dicoding_restaurant_app/provider/restoran_provider.dart';
 import 'package:dicoding_restaurant_app/screen/restaurant_detail_page.dart';
 import 'package:dicoding_restaurant_app/screen/restaurant_list_page.dart';
+import 'package:dicoding_restaurant_app/screen/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,17 +15,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Restaurant App',
-      initialRoute: RestaurantListPage.routName,
-      routes: {
-        RestaurantListPage.routName: (context) => const RestaurantListPage(),
-        RestaruantDetailPage.routName: (context) => RestaruantDetailPage(
-              restaurant:
-                  ModalRoute.of(context)?.settings.arguments as RestaurantModel,
-            ),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => RestaurantProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DetailRestaurantProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Restaurant App',
+        initialRoute: RestaurantListPage.routName,
+        routes: {
+          RestaurantListPage.routName: (context) => const RestaurantListPage(),
+          RestaruantDetailPage.routName: (context) => RestaruantDetailPage(),
+          SearchPage.routeName: (context) => const SearchPage(),
+        },
+      ),
     );
   }
 }
