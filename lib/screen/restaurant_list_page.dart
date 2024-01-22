@@ -3,6 +3,7 @@ import 'package:dicoding_restaurant_app/provider/restoran_provider.dart';
 
 import 'package:dicoding_restaurant_app/screen/search_page.dart';
 import 'package:dicoding_restaurant_app/service/restaurant_detail_service.dart';
+import 'package:dicoding_restaurant_app/service/search_service.dart';
 import 'package:dicoding_restaurant_app/theme/theme.dart';
 import 'package:dicoding_restaurant_app/widget/list_restaurant.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +27,12 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
   @override
   Widget build(BuildContext context) {
     final restaurantProvider = Provider.of<RestaurantProvider>(context);
-    final detailrestaurantProvider =
-        Provider.of<DetailRestaurantProvider>(context);
-    final DetailRestaurantService detailRestaurantService =
-        DetailRestaurantService();
+
+    final SearchService searchService = SearchService();
     void ambilData() async {
       try {
-        final listData = await detailRestaurantService
-            .getDetail(detailrestaurantProvider.detailRestaurant?.id ?? 'dd');
-        print(listData?.id ?? '');
+        final listData = await searchService.searchProduct('melting');
+        print(listData);
       } catch (e) {
         print('Errror : $e');
       }

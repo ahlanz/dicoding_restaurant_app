@@ -1,5 +1,6 @@
 import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
 import 'package:dicoding_restaurant_app/provider/restoran_provider.dart';
+import 'package:dicoding_restaurant_app/provider/search_provider.dart';
 import 'package:dicoding_restaurant_app/screen/restaurant_detail_page.dart';
 import 'package:dicoding_restaurant_app/screen/restaurant_list_page.dart';
 import 'package:dicoding_restaurant_app/screen/search_page.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => DetailRestaurantProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,7 +36,7 @@ class MyApp extends StatelessWidget {
           RestaurantListPage.routName: (context) => const RestaurantListPage(),
           RestaruantDetailPage.routName: (context) =>
               const RestaruantDetailPage(),
-          SearchPage.routeName: (context) => const SearchPage(),
+          SearchPage.routeName: (context) => SearchPage(),
         },
       ),
     );

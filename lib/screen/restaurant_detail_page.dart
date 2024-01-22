@@ -246,7 +246,7 @@ class RestaruantDetailPage extends StatelessWidget {
 
     Widget listCategory(BuildContext context) {
       return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
