@@ -38,6 +38,11 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
       }
     }
 
+    Future<void> _refreshData() async {
+      await Future.delayed(const Duration(seconds: 2));
+      await restaurantProvider.fetchRestaurant();
+    }
+
     Widget judulApp() {
       return Padding(
         padding: const EdgeInsets.only(top: 30),
@@ -48,7 +53,7 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: ambilData,
+                  onTap: _refreshData,
                   child: Text(
                     'Restaurant',
                     style: primaryTextStyle.copyWith(
@@ -93,28 +98,6 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
       );
     }
 
-    // Widget listBuilderProduk(BuildContext context) {
-    //   return FutureBuilder<String>(
-    //     future: DefaultAssetBundle.of(context)
-    //         .loadString('assets/json/local_restaurant.json'),
-    //     builder: (context, snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.waiting) {
-    //         return const CircularProgressIndicator();
-    //       } else if (snapshot.hasError) {
-    //         return Text('Error: ${snapshot.error}');
-    //       } else {
-    //         List<RestaurantModel> restaurant = parseProduk(snapshot.data);
-    //         return ListView.builder(
-    //           itemCount: restaurant.length,
-    //           itemBuilder: (context, index) {
-    //             return listProdukItem(context, restaurant[index]);
-    //           },
-    //         );
-    //       }
-    //     },
-    //   );
-    // }
-
     PreferredSizeWidget header() {
       return AppBar(
         title: judulApp(),
@@ -122,22 +105,25 @@ class _RestaurantListPageState extends State<RestaurantListPage> {
       );
     }
 
-    return Scaffold(
-      appBar: header(),
-      body: restaurantProvider.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : restaurantProvider.isError
-              ? Center(
-                  child: Text(
-                    'Error fetching restaurant data',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 20,
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: Scaffold(
+        appBar: header(),
+        body: restaurantProvider.isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : restaurantProvider.isError
+                ? Center(
+                    child: Text(
+                      'Error Tidak Ada Internet',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                )
-              : listProdukItem(context),
+                  )
+                : listProdukItem(context),
+      ),
     );
   }
 }

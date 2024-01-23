@@ -13,6 +13,16 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SearchProvider searchProvider = Provider.of<SearchProvider>(context);
+    Future<void> _refreshData() async {
+      await Future.delayed(const Duration(seconds: 2));
+      if (_searchController.text == '') {
+        searchProvider.searchRestaurant(_searchController.text);
+      } else {
+        searchProvider.searchRestaurant('');
+      }
+    }
+
     String localSearchQuery = '';
     Widget searchBar() {
       return Container(
@@ -73,66 +83,87 @@ class SearchPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.only(top: 30),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: true,
-              expandedHeight: 60,
-              collapsedHeight: 60,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              flexibleSpace: searchBar(),
-            ),
-            const SliverToBoxAdapter(
-              child: Divider(
-                thickness: 1,
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: Scaffold(
+        body: Container(
+          margin: const EdgeInsets.only(top: 30),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                pinned: true,
+                expandedHeight: 60,
+                collapsedHeight: 60,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                flexibleSpace: searchBar(),
               ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Consumer(builder: (context, searchProvider, _) {
-                    if (context.watch<SearchProvider>().hasilSearch.isEmpty) {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Item yang kamu cari tidak dapat ditemukan',
-                                textAlign: TextAlign.center,
-                                style: primaryTextStyle.copyWith(
-                                  color: Colors.grey.shade400,
-                                  fontSize: 20,
-                                  fontWeight: semiBold,
+              const SliverToBoxAdapter(
+                child: Divider(
+                  thickness: 1,
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Consumer<SearchProvider>(
+                        builder: (context, searchProvider, _) {
+                      Future.delayed(const Duration(seconds: 4));
+                      if (context.watch<SearchProvider>().hasilSearch.isEmpty) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Item yang kamu cari tidak dapat ditemukan',
+                                  textAlign: TextAlign.center,
+                                  style: primaryTextStyle.copyWith(
+                                    color: Colors.grey.shade400,
+                                    fontSize: 20,
+                                    fontWeight: semiBold,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      ProdukModel restaurant =
-                          Provider.of<SearchProvider>(context)
-                              .hasilSearch[index];
-                      print('hasil search restaurant : $restaurant');
-                      return ListCardRestaurant(restaurant: restaurant);
-                    }
-                  });
-                },
-                childCount:
-                    context.watch<SearchProvider>().hasilSearch.isNotEmpty
-                        ? context.watch<SearchProvider>().hasilSearch.length
-                        : 1,
+                        );
+                      } else if (searchProvider.isLoading) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      } else if (searchProvider.isError) {
+                        return Center(
+                          child: Text(
+                            'Error internet tidak ada',
+                            style: primaryTextStyle.copyWith(
+                              fontSize: 30,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ProdukModel restaurant =
+                            Provider.of<SearchProvider>(context)
+                                .hasilSearch[index];
+                        print('hasil search restaurant : $restaurant');
+                        return ListCardRestaurant(restaurant: restaurant);
+                      }
+                    });
+                  },
+                  childCount:
+                      context.watch<SearchProvider>().hasilSearch.isNotEmpty
+                          ? context.watch<SearchProvider>().hasilSearch.length
+                          : 1,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

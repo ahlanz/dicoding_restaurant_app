@@ -17,6 +17,12 @@ class RestaruantDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final DetailRestaurantProvider detailProvider =
         Provider.of<DetailRestaurantProvider>(context);
+    Future<void> _refreshData() async {
+      await Future.delayed(const Duration(seconds: 2));
+      await detailProvider
+          .fetchDetailRestaurant(detailProvider.detailRestaurant?.id ?? '');
+    }
+
     PreferredSizeWidget header() {
       return AppBar(
         title: Text(
@@ -263,24 +269,27 @@ class RestaruantDetailPage extends StatelessWidget {
     }
 
     Widget content() {
-      return SizedBox(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              imageUrl(),
-              judulRestorant(),
-              deskripsi(),
-              categoryJudul(),
-              listCategory(context),
-              menuMakanan(),
-              listProdukMakanan(context),
-              menuMinuman(),
-              listProdukMinuman(context),
-              customerJudul(),
-              listCustomer(context),
-            ],
+      return RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SizedBox(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                imageUrl(),
+                judulRestorant(),
+                deskripsi(),
+                categoryJudul(),
+                listCategory(context),
+                menuMakanan(),
+                listProdukMakanan(context),
+                menuMinuman(),
+                listProdukMinuman(context),
+                customerJudul(),
+                listCustomer(context),
+              ],
+            ),
           ),
         ),
       );
@@ -289,7 +298,20 @@ class RestaruantDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgcolor1,
       appBar: header(),
-      body: content(),
+      body: detailProvider.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : detailProvider.isError
+              ? Center(
+                  child: Text(
+                    'Error No Internet',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 20,
+                    ),
+                  ),
+                )
+              : content(),
     );
   }
 }

@@ -101,11 +101,23 @@ class ListCardRestaurant extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           onTap: () async {
             try {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: bgcolor1,
+                    ),
+                  );
+                },
+              );
+              await Future.delayed(const Duration(seconds: 2));
               await detailProvider.fetchDetailRestaurant(restaurant.id);
-              Navigator.pushNamed(context, RestaruantDetailPage.routName,
-                  arguments: restaurant.id);
+              Navigator.pop(context);
+              Navigator.pushNamed(context, RestaruantDetailPage.routName);
             } catch (e) {
               print('error $e');
+              Navigator.pop(context);
             }
           },
           title: Row(

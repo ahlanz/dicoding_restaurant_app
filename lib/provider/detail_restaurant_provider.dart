@@ -21,6 +21,7 @@ class DetailRestaurantProvider extends ChangeNotifier {
   Future<void> fetchDetailRestaurant(String id) async {
     try {
       _isLoading = true;
+      notifyListeners();
       final DetailModel? data = await _detailRestaurantService.getDetail(id);
       detailRestaurant = data;
       notifyListeners();

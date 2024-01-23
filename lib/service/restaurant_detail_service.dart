@@ -9,12 +9,10 @@ class DetailRestaurantService {
     var headers = {'content-type': 'application/json'};
     var response = await http.get(url, headers: headers);
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       var detailRestaurant = DetailModel.fromJson(data['restaurant']);
-      print('Service detail restaurant');
-      print(data);
+
       return detailRestaurant;
     } else {
       print('Gagal get response');
