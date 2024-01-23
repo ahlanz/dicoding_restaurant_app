@@ -17,9 +17,9 @@ class SearchPage extends StatelessWidget {
     Future<void> _refreshData() async {
       await Future.delayed(const Duration(seconds: 2));
       if (_searchController.text == '') {
-        searchProvider.searchRestaurant(_searchController.text);
-      } else {
-        searchProvider.searchRestaurant('');
+        searchProvider.resetSearchResult();
+      } else if (searchProvider.isError) {
+        searchProvider.resetSearchResult();
       }
     }
 
@@ -53,6 +53,7 @@ class SearchPage extends StatelessWidget {
                 child: TextFormField(
                   controller: _searchController,
                   onChanged: (query) {
+                    context.read<SearchProvider>().resetSearchResult();
                     localSearchQuery = query;
                     if (query.isEmpty) {
                       context.read<SearchProvider>().searchRestaurant('');
@@ -109,8 +110,8 @@ class SearchPage extends StatelessWidget {
                   (context, index) {
                     return Consumer<SearchProvider>(
                         builder: (context, searchProvider, _) {
-                      Future.delayed(const Duration(seconds: 4));
-                      if (context.watch<SearchProvider>().hasilSearch.isEmpty) {
+                      if (context.watch<SearchProvider>().hasilSearch.isEmpty &&
+                          searchProvider.isError == false) {
                         return SizedBox(
                           height: MediaQuery.of(context).size.height * 0.8,
                           child: Center(
@@ -119,7 +120,7 @@ class SearchPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Item yang kamu cari tidak dapat ditemukan',
+                                  'Restoran tidak ditemukan',
                                   textAlign: TextAlign.center,
                                   style: primaryTextStyle.copyWith(
                                     color: Colors.grey.shade400,
